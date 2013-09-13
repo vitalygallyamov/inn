@@ -142,9 +142,12 @@ class Reports extends CActiveRecord
 			->from('reports')
 			->order('r_region')
 			->queryColumn();
-		// //$regions->setDistinct(true);
-		// print_r($regions);
-		return $empty + array_combine($regions, $regions);
+		
+		$result = array();
+		if(!empty($regions))
+			$result = $empty + array_combine($regions, $regions);
+		
+		return $result;
 	}
 
 	//get price bounds
