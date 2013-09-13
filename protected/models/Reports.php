@@ -39,14 +39,13 @@ class Reports extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('r_user_id', 'required'),
-			array('r_inn, r_kpp, r_user_id', 'numerical', 'integerOnly'=>true),
+			array('r_inn, r_kpp', 'numerical', 'integerOnly'=>true),
 			array('r_nmc, r_provision', 'numerical'),
 			array('r_notice, r_customer, r_purchase, r_winner, r_email, r_phone, r_region, r_address, r_fio', 'length', 'max'=>255),
 			array('r_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, r_date, r_notice, r_customer, r_purchase, r_winner, r_inn, r_kpp, r_email, r_phone, r_nmc, r_provision, r_region, r_address, r_fio, r_user_id', 'safe', 'on'=>'search'),
+			array('id, r_date, r_notice, r_customer, r_purchase, r_winner, r_inn, r_kpp, r_email, r_phone, r_nmc, r_provision, r_region, r_address, r_fio', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,7 +81,6 @@ class Reports extends CActiveRecord
 			'r_region' => 'Регион',
 			'r_address' => 'Почтовый адрес',
 			'r_fio' => 'ФИО',
-			'r_user_id' => 'Пользователь',
 		);
 	}
 
@@ -115,11 +113,10 @@ class Reports extends CActiveRecord
 		$criteria->compare('r_email',$this->r_email,true);
 		$criteria->compare('r_phone',$this->r_phone,true);
 		$criteria->compare('r_nmc',$this->r_nmc);
-		$criteria->compare('r_provision',$this->r_provision);
+		$criteria->compare('r_provision >',$this->r_provision);
 		$criteria->compare('r_region',$this->r_region,true);
 		$criteria->compare('r_address',$this->r_address,true);
 		$criteria->compare('r_fio',$this->r_fio,true);
-		$criteria->compare('r_user_id',Yii::app()->user->id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -135,5 +132,28 @@ class Reports extends CActiveRecord
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
+	}
+
+	//get regions
+	public static function getRegions(){
+		$empty = array('' => 'Все');
+		$regions = Yii::app()->db->createCommand()
+			->selectDistinct('r_region')
+			->from('reports')
+			->order('r_region')
+			->queryColumn();
+		// //$regions->setDistinct(true);
+		// print_r($regions);
+		return $empty + array_combine($regions, $regions);
+	}
+
+	//get price bounds
+	public static function priceBounds(){
+		return array(
+			0 => 'Все',
+			100000 => '> 100 т.р.',
+			1000000 => '> 1 млн. р.',
+			10000000 => '> 10 млн. р.'
+		);
 	}
 }

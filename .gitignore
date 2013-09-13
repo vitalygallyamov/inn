@@ -3,7 +3,8 @@
 Capfile
 #---
 
-protected/runtime/
+/protected/data/*
+/protected/runtime/*
 themes/classic/views/
 protected/config/main.php
 protected/config/console.php

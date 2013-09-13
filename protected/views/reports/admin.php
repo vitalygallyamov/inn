@@ -36,6 +36,7 @@ $this->breadcrumbs=array(
 </div><!-- search-form -->
 
 <?php echo CHtml::link('Загрузить', $this->createUrl('upload'));?>
+<?php //Reports::getRegions();?>
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'reports-grid',
@@ -55,13 +56,21 @@ $this->breadcrumbs=array(
 		'r_kpp',
 		'r_email',
 		'r_phone',
-		'r_nmc',
-		'r_provision',
-		'r_region',
+		array(
+			'name' => 'r_nmc',
+			'value' => 'number_format($data->r_nmc, 2, ".", ",")'
+		),
+		array(
+			'name' => 'r_provision',
+			'value' => 'number_format($data->r_provision, 2, ".", ",")',
+			'filter' => CHtml::activeDropDownList($model, 'r_provision', Reports::priceBounds())
+		),
+		array(
+			'name' => 'r_region',
+			'filter' => CHtml::activeDropDownList($model, 'r_region', Reports::getRegions())
+		),
 		'r_address',
 		'r_fio',
-		/*'r_user_id',
-		*/
 		array(
 			'class'=>'CButtonColumn',
 		),

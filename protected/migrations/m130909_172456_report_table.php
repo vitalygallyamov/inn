@@ -19,8 +19,7 @@ class m130909_172456_report_table extends CDbMigration
             'r_provision' => "double COMMENT 'Обеспечение'",
             'r_region' => "string COMMENT 'Регион'",
             'r_address' => "string COMMENT 'Почтовый адрес'",
-            'r_fio' => "string COMMENT 'ФИО'",
-            'r_user_id' => "int NOT NULL COMMENT 'Пользователь'"
+            'r_fio' => "string COMMENT 'ФИО'"
         ), 'ENGINE = MYISAM');
 
 	}

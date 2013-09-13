@@ -162,8 +162,7 @@ class ReportsController extends Controller
 		    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 		    	if($row != 1){
 
-			        $num = count($data);			        
-			        $columns = array('r_user_id' => Yii::app()->user->id);
+			        $num = count($data);
 
 			        for ($c=0; $c < $num; $c++) {
 			        	switch ($c) {

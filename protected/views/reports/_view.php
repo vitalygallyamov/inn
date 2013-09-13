@@ -66,10 +66,6 @@
 	<?php echo CHtml::encode($data->r_fio); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('r_user_id')); ?>:</b>
-	<?php echo CHtml::encode($data->r_user_id); ?>
-	<br />
-
 	*/ ?>
 
 </div>

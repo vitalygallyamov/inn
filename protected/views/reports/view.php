@@ -35,7 +35,6 @@ $this->menu=array(
 		'r_provision',
 		'r_region',
 		'r_address',
-		'r_fio',
-		'r_user_id',
+		'r_fio'
 	),
 )); ?>

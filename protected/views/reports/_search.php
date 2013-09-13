@@ -86,11 +86,6 @@
 		<?php echo $form->textField($model,'r_fio',array('size'=>60,'maxlength'=>255)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'r_user_id'); ?>
-		<?php echo $form->textField($model,'r_user_id'); ?>
-	</div>
-
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Search'); ?>
 	</div>
