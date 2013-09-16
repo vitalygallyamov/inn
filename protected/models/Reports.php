@@ -39,7 +39,7 @@ class Reports extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('r_inn, r_kpp', 'numerical', 'integerOnly'=>true),
+			array('r_inn, r_kpp', 'length', 'max'=>30),
 			array('r_nmc, r_provision', 'numerical'),
 			array('r_notice, r_customer, r_purchase, r_winner, r_email, r_phone, r_region, r_address, r_fio', 'length', 'max'=>255),
 			array('r_date', 'safe'),
@@ -108,8 +108,8 @@ class Reports extends CActiveRecord
 		$criteria->compare('r_customer',$this->r_customer,true);
 		$criteria->compare('r_purchase',$this->r_purchase,true);
 		$criteria->compare('r_winner',$this->r_winner,true);
-		$criteria->compare('r_inn',$this->r_inn);
-		$criteria->compare('r_kpp',$this->r_kpp);
+		$criteria->compare('r_inn',$this->r_inn, true);
+		$criteria->compare('r_kpp',$this->r_kpp, true);
 		$criteria->compare('r_email',$this->r_email,true);
 		$criteria->compare('r_phone',$this->r_phone,true);
 		$criteria->compare('r_nmc',$this->r_nmc);
@@ -155,8 +155,20 @@ class Reports extends CActiveRecord
 		return array(
 			0 => 'Все',
 			100000 => '> 100 т.р.',
+			500000 => '> 500 т.р.',
 			1000000 => '> 1 млн. р.',
 			10000000 => '> 10 млн. р.'
+		);
+	}
+
+	//get dates filter array
+	public static function dates(){
+		$now = date('Y-m-d');
+		$prev = date('Y-m-d', strtotime($now . " - 1 day"));
+		return array(
+			'' =>  'Все',
+			$now => 'Сегодня',
+			$prev => 'Вчера'
 		);
 	}
 }

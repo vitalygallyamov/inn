@@ -47,6 +47,7 @@ $this->breadcrumbs=array(
 		array(            // display 'create_time' using an expression
             'name'=>'r_date',
             'value'=>'date("d.m.Y H:i", strtotime($data->r_date))',
+            'filter' => CHtml::activeDropDownList($model, 'r_date', Reports::dates())
         ),
 		'r_notice',
 		'r_customer',
