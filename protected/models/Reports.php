@@ -115,7 +115,7 @@ class Reports extends CActiveRecord
 		$criteria->compare('r_nmc',$this->r_nmc);
 		//var_dump($this->r_provision);
 		$bounds = explode(',', $this->r_provision);
-		if(count($bounds) > 2){
+		if(count($bounds) == 2){
 			$criteria->addBetweenCondition('r_provision', $bounds[0], $bounds[1]);
 		}else{
 			$criteria->compare('r_provision >',$this->r_provision);
