@@ -70,8 +70,8 @@ $this->breadcrumbs=array(
 			'name' => 'r_region',
 			'filter' => CHtml::activeDropDownList($model, 'r_region', Reports::getRegions())
 		),
-		'r_address',
-		'r_fio',
+		//'r_address',
+		//'r_fio',
 		array(
 			'class'=>'CButtonColumn',
 		),

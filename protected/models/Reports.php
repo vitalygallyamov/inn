@@ -113,7 +113,13 @@ class Reports extends CActiveRecord
 		$criteria->compare('r_email',$this->r_email,true);
 		$criteria->compare('r_phone',$this->r_phone,true);
 		$criteria->compare('r_nmc',$this->r_nmc);
-		$criteria->compare('r_provision >',$this->r_provision);
+		//var_dump($this->r_provision);
+		$bounds = explode(',', $this->r_provision);
+		if(count($bounds) > 2){
+			$criteria->addBetweenCondition('r_provision', $bounds[0], $bounds[1]);
+		}else{
+			$criteria->compare('r_provision >',$this->r_provision);
+		}
 		$criteria->compare('r_region',$this->r_region,true);
 		$criteria->compare('r_address',$this->r_address,true);
 		$criteria->compare('r_fio',$this->r_fio,true);
@@ -154,10 +160,9 @@ class Reports extends CActiveRecord
 	public static function priceBounds(){
 		return array(
 			0 => 'Все',
-			100000 => '> 100 т.р.',
-			500000 => '> 500 т.р.',
-			1000000 => '> 1 млн. р.',
-			10000000 => '> 10 млн. р.'
+			'100000, 500000' => 'от 100 т.р. до 500 т.р.',
+			'500000, 1000000' => 'от 500 т.р. до 1 млн.',
+			1000000 => 'от 1 млн. и выше'
 		);
 	}
 
