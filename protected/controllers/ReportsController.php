@@ -124,13 +124,30 @@ class ReportsController extends Controller
 	 */
 	public function actionAdmin()
 	{
+		$comment = new Comments;
+		$comment->user_id = Yii::app()->user->id;
+
+		//register fancybox
+		$cs = Yii::app()->clientScript;
+		$cs->registerScriptFile('/js/fancybox/jquery.fancybox.pack.js', CClientScript::POS_HEAD);
+
 		$model=new Reports('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Reports']))
 			$model->attributes=$_GET['Reports'];
 
+		if(isset($_GET['ajax']) && $_GET['ajax']==='reports-grid'){
+
+			$this->renderPartial('admin',array(
+				'model'=>$model,
+				'comment' => $comment
+			));
+			Yii::app()->end();
+		}
+
 		$this->render('admin',array(
 			'model'=>$model,
+			'comment' => $comment
 		));
 	}
 
@@ -158,69 +175,88 @@ class ReportsController extends Controller
 		$dbCommand =  Yii::app()->db->createCommand();
 
 		if (($handle = fopen($file->tempName, "r")) !== FALSE) {
-			//$count = 100;
+			
+			$count = 100;
+		    
 		    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 		    	if($row != 1){
 
 			        $num = count($data);
 
+			        $r_columns = array(); // columns for `reports` table
+			        $c_columns = array(); // columns for `companies` table
+
 			        for ($c=0; $c < $num; $c++) {
+
 			        	switch ($c) {
 			        		case 0: //date
 								$dateTime = strtotime($data[$c]);
-								$columns['r_date'] = date('Y-m-d H:i:s', $dateTime);
+								$r_columns['r_date'] = date('Y-m-d H:i:s', $dateTime);
 			        			break;
 			        		case 1: //notice
-			        			$columns['r_notice'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$r_columns['r_notice'] = iconv('CP1251', 'UTF-8', $data[$c]);
 			        			break;
 			        		case 2: //customer
-			        			$columns['r_customer'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$r_columns['r_customer'] = iconv('CP1251', 'UTF-8', $data[$c]);
 			        			break;
 			        		case 3: //purchase
-			        			$columns['r_purchase'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$r_columns['r_purchase'] = iconv('CP1251', 'UTF-8', $data[$c]);
 			        			break;
 			        		case 4: //winner
-			        			$columns['r_winner'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$c_columns['c_name'] = iconv('CP1251', 'UTF-8', $data[$c]); //company
 			        			break;
 			        		case 5: //inn
-			        			$columns['r_inn'] = $data[$c];
+			        			$r_columns['r_inn'] = $data[$c];
+			        			$c_columns['c_inn'] = $data[$c]; //company
 			        			break;
 			        		case 6: //kpp
-			        			$columns['r_kpp'] = $data[$c];
+			        			$c_columns['c_kpp'] = $data[$c]; //company
 			        			break;
 			        		case 7: //email
-			        			$columns['r_email'] = $data[$c];
+			        			$c_columns['c_email'] = $data[$c]; //company
 			        			break;
 			        		case 8: //phone
-			        			$columns['r_phone'] = $data[$c];
+			        			$c_columns['c_phone'] = $data[$c]; //company
 			        			break;
 			        		case 9: //nmc
 			        			$data[$c] = str_replace(' ', '', $data[$c]);
-			        			$columns['r_nmc'] = str_replace(',', '.', $data[$c]);
+			        			$r_columns['r_nmc'] = str_replace(',', '.', $data[$c]);
 			        			break;
 			        		case 10: //provision
 			        			$data[$c] = str_replace(' ', '', $data[$c]);
-			        			$columns['r_provision'] = str_replace(',', '.', $data[$c]);
+			        			$r_columns['r_provision'] = str_replace(',', '.', $data[$c]);
 			        			break;
 			        		case 11: //region
-			        			$columns['r_region'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$r_columns['r_region'] = iconv('CP1251', 'UTF-8', $data[$c]);
 			        			break;
 			        		case 12: //address
-			        			$columns['r_address'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$c_columns['c_address'] = iconv('CP1251', 'UTF-8', $data[$c]); //company
 			        			break;
 			        		case 13: //fio
-			        			$columns['r_fio'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$c_columns['c_fio'] = iconv('CP1251', 'UTF-8', $data[$c]); //company
 			        			break;
 			        	}
 			        }
-			        //print_r($columns);
-			        $dbCommand->insert('reports', $columns);
+
+			        
+			        if(!empty($c_columns['c_inn']) && strlen(trim($c_columns['c_inn'])) > 0){
+			        	
+			        	//---add company
+			        	if(!Companies::model()->exists('c_inn=:inn', array(':inn' => $c_columns['c_inn']))){
+			        		//check on exist company in db
+			        		//if no in db then add
+			        		$dbCommand2 =  Yii::app()->db->createCommand();
+			        		$dbCommand2->insert('companies', $c_columns);
+			        	}
+			        	//add row in `reports` table
+			        	$dbCommand->insert('reports', $r_columns);
+			        }			        
 			        // die();
 			    }
 		        
-		        //if($count == 0) break;
+		        if($count == 0) break;
 		        
-		        //$count--;
+		        $count--;
 		        $row++;
 		    }
 		    fclose($handle);

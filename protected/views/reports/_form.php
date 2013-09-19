@@ -44,33 +44,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'r_winner'); ?>
-		<?php echo $form->textField($model,'r_winner',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'r_winner'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->labelEx($model,'r_inn'); ?>
-		<?php echo $form->textField($model,'r_inn'); ?>
+		<?php echo $form->textField($model,'r_inn',array('size'=>30,'maxlength'=>30)); ?>
 		<?php echo $form->error($model,'r_inn'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'r_kpp'); ?>
-		<?php echo $form->textField($model,'r_kpp'); ?>
-		<?php echo $form->error($model,'r_kpp'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'r_email'); ?>
-		<?php echo $form->textField($model,'r_email',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'r_email'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'r_phone'); ?>
-		<?php echo $form->textField($model,'r_phone',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'r_phone'); ?>
 	</div>
 
 	<div class="row">
@@ -92,15 +68,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'r_address'); ?>
-		<?php echo $form->textField($model,'r_address',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'r_address'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'r_fio'); ?>
-		<?php echo $form->textField($model,'r_fio',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'r_fio'); ?>
+		<?php echo $form->labelEx($model,'r_status'); ?>
+		<?php echo $form->textField($model,'r_status'); ?>
+		<?php echo $form->error($model,'r_status'); ?>
 	</div>
 
 	<div class="row buttons">

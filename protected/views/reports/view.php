@@ -26,15 +26,10 @@ $this->menu=array(
 		'r_notice',
 		'r_customer',
 		'r_purchase',
-		'r_winner',
 		'r_inn',
-		'r_kpp',
-		'r_email',
-		'r_phone',
 		'r_nmc',
 		'r_provision',
 		'r_region',
-		'r_address',
-		'r_fio'
+		'r_status',
 	),
 )); ?>

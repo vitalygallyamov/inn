@@ -37,28 +37,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'r_winner'); ?>
-		<?php echo $form->textField($model,'r_winner',array('size'=>60,'maxlength'=>255)); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'r_inn'); ?>
-		<?php echo $form->textField($model,'r_inn'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'r_kpp'); ?>
-		<?php echo $form->textField($model,'r_kpp'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'r_email'); ?>
-		<?php echo $form->textField($model,'r_email',array('size'=>60,'maxlength'=>255)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'r_phone'); ?>
-		<?php echo $form->textField($model,'r_phone',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->textField($model,'r_inn',array('size'=>30,'maxlength'=>30)); ?>
 	</div>
 
 	<div class="row">
@@ -77,13 +57,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'r_address'); ?>
-		<?php echo $form->textField($model,'r_address',array('size'=>60,'maxlength'=>255)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'r_fio'); ?>
-		<?php echo $form->textField($model,'r_fio',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'r_status'); ?>
+		<?php echo $form->textField($model,'r_status'); ?>
 	</div>
 
 	<div class="row buttons">
