@@ -54,6 +54,7 @@
 					'click' => 'js:function(e){
 						e.preventDefault();
 						var com_id = $(this).closest("tr").data("company");
+						jQuery("#comment-form").find("#Comments_text").val("");
 						jQuery("#comment-form").find("#Comments_company_id").val(com_id);
 						$.fancybox.open(jQuery("#comment-form"));
 					}'
