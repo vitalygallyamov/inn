@@ -94,7 +94,13 @@ class Reports extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('r_date',$this->r_date,true);
+		//$criteria->compare('r_date',$this->r_date,true);
+
+		if($this->r_date){
+			$date = date('Y-m-d', strtotime($this->r_date));
+			$criteria->addSearchCondition('r_date', $date, true);
+		}
+
 		$criteria->compare('r_notice',$this->r_notice,true);
 		$criteria->compare('r_customer',$this->r_customer,true);
 		$criteria->compare('r_purchase',$this->r_purchase,true);
@@ -154,7 +160,7 @@ class Reports extends CActiveRecord
 	}
 
 	//get dates filter array
-	public static function dates(){
+	/*public static function dates(){
 		$now = date('Y-m-d');
 		$prev = date('Y-m-d', strtotime($now . " - 1 day"));
 		return array(
@@ -162,5 +168,5 @@ class Reports extends CActiveRecord
 			$now => 'Сегодня',
 			$prev => 'Вчера'
 		);
-	}
+	}*/
 }

@@ -2,14 +2,40 @@
 	'id'=>'reports-grid',
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
+	'afterAjaxUpdate' => 'reinstallDatePicker', // (#1)
 	//'ajaxType' => 'GET',
 	'rowHtmlOptionsExpression' => 'array("data-company" => $data->company->c_inn)',
 	'columns'=>array(
 		//'id',
-		array(            // display 'create_time' using an expression
+		/*array(            // display 'create_time' using an expression
             'name'=>'r_date',
             'value'=>'date("d.m.Y H:i", strtotime($data->r_date))',
-            'filter' => CHtml::activeDropDownList($model, 'r_date', Reports::dates())
+            //'filter' => CHtml::activeDropDownList($model, 'r_date', Reports::dates())
+        ),*/
+ 		array(
+            'name' => 'r_date',
+            'value'=>'date("d.m.Y H:i", strtotime($data->r_date))',
+            'filter' => $this->widget('zii.widgets.jui.CJuiDatePicker', array(
+                'model'=>$model, 
+                'attribute'=>'r_date', 
+                'language' => 'ru',
+                //'i18nScriptFile' => 'jquery.ui.datepicker-ru.js', //(#2)
+                'htmlOptions' => array(
+                    'id' => 'dp_r_date',
+                    'size' => '10',
+                ),
+                'defaultOptions' => array(  // (#3)
+                    'showOn' => 'focus', 
+                    'dateFormat' => 'dd.mm.yy',
+                    'showOtherMonths' => true,
+                    'selectOtherMonths' => true,
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    /*'showButtonPanel' => true,
+                    'gotoCurrent' => true*/
+                )
+            ), 
+            true), // (#4)
         ),
 		'r_notice',
 		'r_customer',
@@ -85,4 +111,12 @@
 			'class'=>'CButtonColumn',
 		),
 	),
-)); ?>
+)); 
+
+// (#5)
+Yii::app()->clientScript->registerScript('re-install-date-picker', "
+function reinstallDatePicker(id, data) {
+    jQuery('#dp_r_date').datepicker(jQuery.extend({showMonthAfterYear:false},jQuery.datepicker.regional['ru'],[]));
+}
+");
+?>
