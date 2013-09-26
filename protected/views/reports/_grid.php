@@ -4,7 +4,7 @@
 	'filter'=>$model,
 	'afterAjaxUpdate' => 'reinstallDatePicker', // (#1)
 	//'ajaxType' => 'GET',
-	'rowHtmlOptionsExpression' => 'array("data-company" => $data->company->c_inn)',
+	'rowHtmlOptionsExpression' => 'array("data-company" => $data->company->c_inn, "data-report" => $data->id)',
 	'columns'=>array(
 		//'id',
 		/*array(            // display 'create_time' using an expression
@@ -12,6 +12,70 @@
             'value'=>'date("d.m.Y H:i", strtotime($data->r_date))',
             //'filter' => CHtml::activeDropDownList($model, 'r_date', Reports::dates())
         ),*/
+		array(
+			'class'=>'CButtonColumn',
+			'template' => '{to_hide} {to_show} {winners}',
+			'header'=>'Действия',
+			'buttons' => array(
+				'to_hide' => array( 
+					'label' => 'Скрыть',
+					'visible' => '!$data->company->c_status',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Вы уверены?")){
+							var com_id = $(this).closest("tr").data("company");
+							$.ajax({
+								url: "/companies/changeCompany",
+								data: {id: com_id, hide: 1},
+								type: "GET",
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
+							});
+						}
+					}'
+				),
+				'to_show' => array( 
+					'label' => 'Показать',
+					'visible' => '$data->company->c_status',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Вы уверены?")){
+							var com_id = $(this).closest("tr").data("company");
+							$.ajax({
+								url: "/companies/changeCompany",
+								data: {id: com_id, hide: 0},
+								type: "GET",
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
+							});
+						}
+					}'
+				),
+				'winners' => array( 
+					'label' => 'Победитель',
+					'visible' => '!$data->company->c_status',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Добавить в победители?")){
+							var report_id = $(this).closest("tr").data("report");
+							$.ajax({
+								url: "/reports/addToWinners",
+								data: {report_id: report_id},
+								type: "GET",
+								success: function(){}
+							});
+						}
+					}'
+				),
+				/*'add_to_winners' => array( 
+					'label' => 'Победитель',
+					'click' => 'js:function(e){}'
+				),*/
+			)
+			
+		),
  		array(
             'name' => 'r_date',
             'value'=>'date("d.m.Y H:i", strtotime($data->r_date))',

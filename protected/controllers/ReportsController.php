@@ -127,14 +127,16 @@ class ReportsController extends Controller
 		$comment = new Comments;
 		$comment->user_id = Yii::app()->user->id;
 
-		//register fancybox
-		$cs = Yii::app()->clientScript;
-		$cs->registerScriptFile('/js/fancybox/jquery.fancybox.pack.js', CClientScript::POS_HEAD);
-
 		$model=new Reports('search');
 		$model->unsetAttributes();  // clear any default values
 		if(isset($_GET['Reports']))
 			$model->attributes=$_GET['Reports'];
+
+		if(isset($_GET['hidden']))
+			$model->hidden = false;
+
+		if(isset($_GET['winners']))
+			$model->winners = true;
 
 		if(isset($_GET['ajax']) && $_GET['ajax']==='reports-grid'){
 
@@ -167,6 +169,28 @@ class ReportsController extends Controller
 	}
 
 	/**
+	 * To winners
+	 */
+	public function actionAddToWinners($report_id){
+		$cdb = Yii::app()->db->createCommand();
+
+		$report = Reports::model()->findByPk($report_id);
+
+		if($report === null) Yii::app()->end();
+
+		$cdb->insert('user_companies', array(
+			'report_id' => $report_id,
+			'user_id' => Yii::app()->user->id
+		));
+
+		//up company counter
+		$report->company->c_count += 1;
+		$report->company->save();
+
+		Yii::app()->end();
+	}
+
+	/**
 	 * Parse csv file
 	 */
 	private function parseCSV($file){
@@ -176,7 +200,7 @@ class ReportsController extends Controller
 
 		if (($handle = fopen($file->tempName, "r")) !== FALSE) {
 			
-			$count = 100;
+			// $count = 100;
 		    
 		    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 		    	if($row != 1){
@@ -254,9 +278,9 @@ class ReportsController extends Controller
 			        // die();
 			    }
 		        
-		        if($count == 0) break;
+		        // if($count == 0) break;
 		        
-		        $count--;
+		        // $count--;
 		        $row++;
 		    }
 		    fclose($handle);

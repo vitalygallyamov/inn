@@ -30,10 +30,28 @@ $('.search-form form').submit(function(){
 
 <?php //$r = ""; if(!empty($r)) echo strlen(trim($r));?>
 
-<?php echo CHtml::link('Загрузить', $this->createUrl('upload'));?>
+<?php echo CHtml::link('Загрузить файл', $this->createUrl('upload'));?>
+<br>
+
+<?
+	$u = Users::model()->findByPk(Yii::app()->user->id);
+?>
+
+<div class="action_buttons">
+	<?php echo CHtml::link('Показать скрытые', $this->createUrl('admin', array('hidden' => true)));?>
+	<?php echo CHtml::link('Победители'." (".count($u->winners).")", $this->createUrl('admin', array('winners' => true)));?>
+</div>
 
 <div id="comment-form" style="display: none;">
 	<? $this->renderPartial('/comments/_form', array('model' => $comment));?>
 </div>
 
 <?php $this->renderPartial('_grid', array('model'=>$model)); ?>
+
+<?php
+
+//register fancybox
+$cs = Yii::app()->clientScript;
+$cs->registerScriptFile('/js/fancybox/jquery.fancybox.pack.js', CClientScript::POS_HEAD);
+
+?>

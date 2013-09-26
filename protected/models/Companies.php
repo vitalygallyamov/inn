@@ -30,11 +30,12 @@ class Companies extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
+			array('c_status', 'numerical', 'integerOnly'=>true),
 			array('c_inn, c_kpp', 'length', 'max'=>30),
-			array('с_name, c_email, c_phone, c_address, c_fio', 'length', 'max'=>255),
+			array('c_name, c_email, c_phone, c_address, c_fio', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('c_inn, с_name, c_kpp, c_email, c_phone, c_address, c_fio', 'safe', 'on'=>'search'),
+			array('c_inn, c_name, c_kpp, c_email, c_phone, c_address, c_fio', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +58,7 @@ class Companies extends CActiveRecord
 	{
 		return array(
 			'c_inn' => 'ИНН',
-			'с_name' => 'Название',
+			'c_name' => 'Название',
 			'c_kpp' => 'КПП',
 			'c_email' => 'Email',
 			'c_phone' => 'Телефон',
@@ -85,7 +86,7 @@ class Companies extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('c_inn',$this->c_inn,true);
-		$criteria->compare('с_name',$this->с_name,true);
+		$criteria->compare('c_name',$this->c_name,true);
 		$criteria->compare('c_kpp',$this->c_kpp,true);
 		$criteria->compare('c_email',$this->c_email,true);
 		$criteria->compare('c_phone',$this->c_phone,true);
