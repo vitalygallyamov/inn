@@ -131,9 +131,17 @@ class Reports extends CActiveRecord
 
 		//winners
 		if($this->winners){
-			$criteria->join .= ' INNER JOIN user_companies ON t.id = report_id';
-			$criteria->addCondition('user_id=:u_id');
-			$criteria->params[':u_id'] = Yii::app()->user->id;
+			$user_id = Yii::app()->user->id;
+
+			$user_ids = Yii::app()->db->createCommand()
+				->select('company_id')
+				->from('user_companies')
+				->where('user_id=:user_id', array(':user_id' => $user_id))
+				->queryColumn();
+			 $criteria->addInCondition('r_inn', $user_ids); 
+			// $criteria->join .= ' INNER JOIN user_companies ON t.id = report_id';
+			// $criteria->addCondition('user_id=:u_id');
+			// $criteria->params[':u_id'] = Yii::app()->user->id;
 		}
 
 		return new CActiveDataProvider($this, array(

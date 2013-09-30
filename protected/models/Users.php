@@ -44,7 +44,7 @@ class Users extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'winners'=>array(self::MANY_MANY, 'Reports', 'user_companies(user_id, report_id)', 'condition' => 'user_id=:u_id', 'params' => array(':u_id' => Yii::app()->user->id)),
+			'winners'=>array(self::MANY_MANY, 'Companies', 'user_companies(user_id, company_id)', 'condition' => 'user_id=:u_id', 'params' => array(':u_id' => Yii::app()->user->id)),
 		);
 	}
 

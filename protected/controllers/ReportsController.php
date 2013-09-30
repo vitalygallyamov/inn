@@ -171,21 +171,31 @@ class ReportsController extends Controller
 	/**
 	 * To winners
 	 */
-	public function actionAddToWinners($report_id){
+	public function actionAddToWinners($company_id){
 		$cdb = Yii::app()->db->createCommand();
 
-		$report = Reports::model()->findByPk($report_id);
+		$company = Companies::model()->findByPk($company_id);
 
-		if($report === null) Yii::app()->end();
+		if($company === null) Yii::app()->end();
 
-		$cdb->insert('user_companies', array(
-			'report_id' => $report_id,
-			'user_id' => Yii::app()->user->id
-		));
+		$user_id = Yii::app()->user->id;
 
+		$exist = $cdb->select('*')
+		    ->from('user_companies')
+		    ->where('company_id=:company_id AND user_id=:user_id', 
+		    	array(':company_id'=>$company_id, ':user_id'=>$user_id)
+		    )->queryRow();
+
+		if(empty($exist)){
+			$cdb->insert('user_companies', array(
+				'company_id' => $company_id,
+				'user_id' => $user_id
+			));
+		}
+		
 		//up company counter
-		$report->company->c_count += 1;
-		$report->company->save();
+		$company->c_count += 1;
+		$company->save();
 
 		Yii::app()->end();
 	}

@@ -48,6 +48,7 @@ class Companies extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'comments'=>array(self::HAS_MANY, 'Comments', 'company_id'),
+			'protocols' => array(self::HAS_MANY, 'Reports', 'r_inn')
 		);
 	}
 

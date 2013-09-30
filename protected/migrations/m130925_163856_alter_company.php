@@ -8,9 +8,9 @@ class m130925_163856_alter_company extends CDbMigration
 
 		$this->createTable('user_companies', array(
             'user_id' => "int NOT NULL",
-            //'company_id' => "varchar(30) NOT NULL",
-            'report_id' => "int NOT NULL",
-            'PRIMARY KEY (user_id, report_id)'
+            'company_id' => "varchar(30) NOT NULL",
+            //'report_id' => "int NOT NULL",
+            'PRIMARY KEY (user_id, company_id)'
         ), 'ENGINE = MYISAM');
 	}
 

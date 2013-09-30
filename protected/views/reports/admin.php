@@ -35,11 +35,16 @@ $('.search-form form').submit(function(){
 
 <?
 	$u = Users::model()->findByPk(Yii::app()->user->id);
+
+	$count_winners = 0;
+	foreach ($u->winners as $value) {
+		$count_winners += count($value->protocols);
+	}
 ?>
 
 <div class="action_buttons">
 	<?php echo CHtml::link('Показать скрытые', $this->createUrl('admin', array('hidden' => true)));?>
-	<?php echo CHtml::link('Победители'." (".count($u->winners).")", $this->createUrl('admin', array('winners' => true)));?>
+	<?php echo CHtml::link('Победители'." (".$count_winners.")", $this->createUrl('admin', array('winners' => true)));?>
 </div>
 
 <div id="comment-form" style="display: none;">

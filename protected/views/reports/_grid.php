@@ -59,12 +59,14 @@
 					'click' => 'js:function(e){
 						e.preventDefault();
 						if(confirm("Добавить в победители?")){
-							var report_id = $(this).closest("tr").data("report");
+							var company_id = $(this).closest("tr").data("company");
 							$.ajax({
 								url: "/reports/addToWinners",
-								data: {report_id: report_id},
+								data: {company_id: company_id},
 								type: "GET",
-								success: function(){}
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
 							});
 						}
 					}'
@@ -134,6 +136,10 @@
 			'name' => 'r_region',
 			'filter' => CHtml::activeDropDownList($model, 'r_region', Reports::getRegions())
 		),
+		array(
+            'header'=>'Выиграно',
+            'value'=>'$data->company->c_count',
+        ),
 		array(
 			'class'=>'CButtonColumn',
 			'template' => '{add_comment} {all_comments}',
