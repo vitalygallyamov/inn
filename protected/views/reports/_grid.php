@@ -14,12 +14,12 @@
         ),*/
 		array(
 			'class'=>'CButtonColumn',
-			'template' => '{to_hide} {to_show} {winners}',
+			'template' => '{to_hide} {to_show} {winners} {cancel_winners}',
 			'header'=>'Действия',
 			'buttons' => array(
 				'to_hide' => array( 
 					'label' => 'Скрыть',
-					'visible' => '!$data->company->c_status',
+					'visible' => '!$data->company->c_status && !$data->hasWinner()',
 					'click' => 'js:function(e){
 						e.preventDefault();
 						if(confirm("Вы уверены?")){
@@ -55,7 +55,7 @@
 				),
 				'winners' => array( 
 					'label' => 'Победитель',
-					'visible' => '!$data->company->c_status',
+					'visible' => '!$data->hasWinner()',
 					'click' => 'js:function(e){
 						e.preventDefault();
 						if(confirm("Добавить в победители?")){
@@ -71,6 +71,24 @@
 						}
 					}'
 				),
+				'cancel_winners' => array( 
+					'label' => 'Убрать из подедителей',
+					'visible' => '$data->hasWinner()',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Удалить из победителей?")){
+							var company_id = $(this).closest("tr").data("company");
+							$.ajax({
+								url: "/reports/deleteFromWinners",
+								data: {company_id: company_id},
+								type: "GET",
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
+							});
+						}
+					}'
+				)
 				/*'add_to_winners' => array( 
 					'label' => 'Победитель',
 					'click' => 'js:function(e){}'

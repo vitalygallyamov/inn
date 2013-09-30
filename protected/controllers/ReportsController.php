@@ -201,6 +201,38 @@ class ReportsController extends Controller
 	}
 
 	/**
+	 * Delete from winners
+	 */
+	public function actionDeleteFromWinners($company_id){
+		$cdb = Yii::app()->db->createCommand();
+
+		$company = Companies::model()->findByPk($company_id);
+
+		if($company === null) Yii::app()->end();
+
+		$user_id = Yii::app()->user->id;
+
+		$exist = $cdb->select('*')
+		    ->from('user_companies')
+		    ->where('company_id=:company_id AND user_id=:user_id', 
+		    	array(':company_id'=>$company_id, ':user_id'=>$user_id)
+		    )->queryRow();
+
+		if(!empty($exist)){
+			$cdb->delete('user_companies', 'user_id=:u_id AND company_id=:company_id', array(
+				':company_id' => $company_id,
+				':u_id' => $user_id
+			));
+		}
+		
+		//down company counter
+		$company->c_count -= 1;
+		$company->save();
+
+		Yii::app()->end();
+	}
+
+	/**
 	 * Parse csv file
 	 */
 	private function parseCSV($file){

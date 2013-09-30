@@ -186,6 +186,18 @@ class Reports extends CActiveRecord
 		);
 	}
 
+	public function hasWinner(){
+		$company = Companies::model()->findByPk($this->r_inn);
+		
+		$winners = Yii::app()->db->createCommand()
+			->select('*')
+			->from('user_companies')
+			->where('user_id=:u_id AND company_id=:c_id', array(':u_id' => Yii::app()->user->id, ':c_id' => $company->c_inn))
+			->queryRow();
+
+		return !empty($winners);
+	}
+
 	//get dates filter array
 	/*public static function dates(){
 		$now = date('Y-m-d');
