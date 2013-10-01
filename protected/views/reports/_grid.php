@@ -3,6 +3,7 @@
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'afterAjaxUpdate' => 'reinstallDatePicker', // (#1)
+	'template' => '{pager}{summary}{items}{summary}{pager}',
 	//'ajaxType' => 'GET',
 	'rowHtmlOptionsExpression' => 'array("data-company" => $data->company->c_inn, "data-report" => $data->id)',
 	'columns'=>array(
