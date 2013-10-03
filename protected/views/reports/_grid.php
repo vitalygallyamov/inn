@@ -62,7 +62,7 @@
 						if(confirm("Добавить в победители?")){
 							var company_id = $(this).closest("tr").data("company");
 							$.ajax({
-								url: "/reports/addToWinners",
+								url: "/reports/changeWinners",
 								data: {company_id: company_id},
 								type: "GET",
 								success: function(){
@@ -80,8 +80,8 @@
 						if(confirm("Удалить из победителей?")){
 							var company_id = $(this).closest("tr").data("company");
 							$.ajax({
-								url: "/reports/deleteFromWinners",
-								data: {company_id: company_id},
+								url: "/reports/changeWinners",
+								data: {company_id: company_id, action: "delete"},
 								type: "GET",
 								success: function(){
 									jQuery("#reports-grid").yiiGridView("update");

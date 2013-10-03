@@ -169,9 +169,10 @@ class ReportsController extends Controller
 	}
 
 	/**
-	 * To winners
+	 * Change winners
 	 */
-	public function actionAddToWinners($company_id){
+
+	public function actionChangeWinners($company_id, $action='add'){
 		$cdb = Yii::app()->db->createCommand();
 
 		$company = Companies::model()->findByPk($company_id);
@@ -186,48 +187,21 @@ class ReportsController extends Controller
 		    	array(':company_id'=>$company_id, ':user_id'=>$user_id)
 		    )->queryRow();
 
-		if(empty($exist)){
-			$cdb->insert('user_companies', array(
-				'company_id' => $company_id,
-				'user_id' => $user_id
-			));
+		if($action == 'add'){
+			if(empty($exist)){
+				$cdb->insert('user_companies', array(
+					'company_id' => $company_id,
+					'user_id' => $user_id
+				));
+			}
+		}elseif($action == 'delete'){
+			if(!empty($exist)){
+				$cdb->delete('user_companies', 'user_id=:u_id AND company_id=:company_id', array(
+					':company_id' => $company_id,
+					':u_id' => $user_id
+				));
+			}
 		}
-		
-		//up company counter
-		$company->c_count += 1;
-		$company->save();
-
-		Yii::app()->end();
-	}
-
-	/**
-	 * Delete from winners
-	 */
-	public function actionDeleteFromWinners($company_id){
-		$cdb = Yii::app()->db->createCommand();
-
-		$company = Companies::model()->findByPk($company_id);
-
-		if($company === null) Yii::app()->end();
-
-		$user_id = Yii::app()->user->id;
-
-		$exist = $cdb->select('*')
-		    ->from('user_companies')
-		    ->where('company_id=:company_id AND user_id=:user_id', 
-		    	array(':company_id'=>$company_id, ':user_id'=>$user_id)
-		    )->queryRow();
-
-		if(!empty($exist)){
-			$cdb->delete('user_companies', 'user_id=:u_id AND company_id=:company_id', array(
-				':company_id' => $company_id,
-				':u_id' => $user_id
-			));
-		}
-		
-		//down company counter
-		$company->c_count -= 1;
-		$company->save();
 
 		Yii::app()->end();
 	}
@@ -311,9 +285,16 @@ class ReportsController extends Controller
 			        	if(!Companies::model()->exists('c_inn=:inn', array(':inn' => $c_columns['c_inn']))){
 			        		//check on exist company in db
 			        		//if no in db then add
-			        		$dbCommand2 =  Yii::app()->db->createCommand();
+			        		$dbCommand2 = Yii::app()->db->createCommand();
 			        		$dbCommand2->insert('companies', $c_columns);
 			        	}
+			        	//increment company counter
+			        	$sql="UPDATE companies SET c_count = c_count + 1 WHERE c_inn=:c_inn";
+			        	$up_counter = Yii::app()->db->createCommand($sql);
+			        	$up_counter->bindParam(":c_inn", $c_columns['c_inn'], PDO::PARAM_STR);
+			        	$up_counter->execute();
+			        	// $company = Companies::model()->findByPk($c_columns['c_inn']);
+			        	// $company->updateCounters(array('c_count' => 1));
 			        	//add row in `reports` table
 			        	$dbCommand->insert('reports', $r_columns);
 			        }			        
