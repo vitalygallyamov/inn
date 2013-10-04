@@ -220,6 +220,9 @@ class ReportsController extends Controller
 		if (($handle = fopen($file->tempName, "r")) !== FALSE) {
 			
 			// $count = 100;
+			//point backup
+			$dbCommand->insert('backup', array('user_id' => Yii::app()->user->id));
+			$back_id = Yii::app()->db->getLastInsertID();
 		    
 		    while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
 		    	if($row != 1){
@@ -228,6 +231,9 @@ class ReportsController extends Controller
 
 			        $r_columns = array(); // columns for `reports` table
 			        $c_columns = array(); // columns for `companies` table
+
+			        $r_columns['r_backup_id'] = $back_id;
+			        $c_columns['c_backup_id'] = $back_id;
 
 			        for ($c=0; $c < $num; $c++) {
 

@@ -37,6 +37,7 @@
 				// array('label'=>'Contact', 'url'=>array('/site/contact')),
 				array('label'=>'Отчеты', 'url'=>array('/reports/admin'), 'visible'=>Yii::app()->user->checkAccess('user')),
 				array('label'=>'Управление пользователями', 'url'=>array('/users/admin'), 'visible'=>Yii::app()->user->checkAccess('admin')),
+				array('label'=>'Управление откатами', 'url'=>array('/backup/admin'), 'visible'=>Yii::app()->user->checkAccess('admin')),
 				array('label'=>'Войти', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Выйти ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
