@@ -20,6 +20,7 @@ class Reports extends CActiveRecord
 
 	public $hidden = true;
 	public $winners = false;
+	public $c_name;
 	/**
 	 * @return string the associated database table name
 	 */
@@ -121,13 +122,15 @@ class Reports extends CActiveRecord
 		$criteria->compare('r_status',$this->r_status);
 
 		//only visible companies
-		$criteria->join = 'INNER JOIN companies ON companies.c_inn = t.r_inn';
+		$criteria->with = array('company');
 		if($this->hidden){
 			$criteria->addCondition('c_status=0');
 		}
 		else{
 			$criteria->addCondition('c_status=1');
 		}
+
+		$criteria->compare('company.c_name',$this->c_name,true);
 
 		//winners
 		if($this->winners){
@@ -139,15 +142,19 @@ class Reports extends CActiveRecord
 				->where('user_id=:user_id', array(':user_id' => $user_id))
 				->queryColumn();
 			 $criteria->addInCondition('r_inn', $user_ids); 
-			// $criteria->join .= ' INNER JOIN user_companies ON t.id = report_id';
-			// $criteria->addCondition('user_id=:u_id');
-			// $criteria->params[':u_id'] = Yii::app()->user->id;
 		}
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 			'pagination'=>array('pageSize'=>100),
 		));
+	}
+
+	public function getC_name(){
+		return $this->c_name;
+	}
+	public function setC_name($value){
+		$this->c_name = $value;
 	}
 
 	/**

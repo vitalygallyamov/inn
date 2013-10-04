@@ -128,6 +128,7 @@
 		array(
             'header'=>'Победитель',
             'value'=>'$data->company->c_name',
+            'filter' => CHtml::activeTextField($model, 'c_name')
         ),
 		'r_inn',
 		array(

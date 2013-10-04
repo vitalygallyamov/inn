@@ -138,6 +138,9 @@ class ReportsController extends Controller
 		if(isset($_GET['winners']))
 			$model->winners = true;
 
+		if($_GET['Reports']['c_name'])
+			$model->c_name = $_GET['Reports']['c_name'];
+
 		if(isset($_GET['ajax']) && $_GET['ajax']==='reports-grid'){
 
 			$this->renderPartial('admin',array(
