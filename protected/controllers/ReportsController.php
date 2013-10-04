@@ -138,7 +138,7 @@ class ReportsController extends Controller
 		if(isset($_GET['winners']))
 			$model->winners = true;
 
-		if($_GET['Reports']['c_name'])
+		if(isset($_GET['Reports']['c_name']))
 			$model->c_name = $_GET['Reports']['c_name'];
 
 		if(isset($_GET['ajax']) && $_GET['ajax']==='reports-grid'){
@@ -285,7 +285,9 @@ class ReportsController extends Controller
 			        if(!empty($c_columns['c_inn']) && strlen(trim($c_columns['c_inn'])) > 0){
 			        	
 			        	//---add company
-			        	if(!Companies::model()->exists('c_inn=:inn', array(':inn' => $c_columns['c_inn']))){
+			        	$t = Companies::model()->findByPk($c_columns['c_inn']);
+
+			        	if(Companies::model()->findByPk($c_columns['c_inn']) === null){
 			        		//check on exist company in db
 			        		//if no in db then add
 			        		$dbCommand2 = Yii::app()->db->createCommand();
