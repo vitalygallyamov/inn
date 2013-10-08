@@ -36,7 +36,7 @@ $this->menu=array(
 					'label' => 'Откатить',
 					'visible' => '$data->isLastID($data->id)',
 					'url' => function($data, $row){
-						return $this->createUrl('back', array('id' => $data->id));
+						return '/backup/back/'.$data->id;
 					},
 					'options'=>array('confirm'=>'Вы уверены?'),
 				)
