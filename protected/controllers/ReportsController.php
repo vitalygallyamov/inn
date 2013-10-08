@@ -255,8 +255,8 @@ class ReportsController extends Controller
 			        			$c_columns['c_name'] = iconv('CP1251', 'UTF-8', $data[$c]); //company
 			        			break;
 			        		case 5: //inn
-			        			$r_columns['r_inn'] = $data[$c];
-			        			$c_columns['c_inn'] = $data[$c]; //company
+			        			$r_columns['r_inn'] = iconv('CP1251', 'UTF-8', $data[$c]);
+			        			$c_columns['c_inn'] = iconv('CP1251', 'UTF-8', $data[$c]); //company
 			        			break;
 			        		case 6: //kpp
 			        			$c_columns['c_kpp'] = $data[$c]; //company
@@ -293,7 +293,7 @@ class ReportsController extends Controller
 			        	//---add company
 			        	$t = Companies::model()->findByPk($c_columns['c_inn']);
 
-			        	if(Companies::model()->findByPk($c_columns['c_inn']) === null){
+			        	if($t === null){
 			        		//check on exist company in db
 			        		//if no in db then add
 			        		$dbCommand2 = Yii::app()->db->createCommand();
