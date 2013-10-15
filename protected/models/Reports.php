@@ -144,8 +144,13 @@ class Reports extends CActiveRecord
 			 $criteria->addInCondition('r_inn', $user_ids); 
 		}
 
+		$sort = new CSort;
+		$sort->attributes = array('company.c_count'=>array('asc'=>'company.c_count', 'desc'=>'company.c_count DESC'), '*');
+		$sort->defaultOrder = array('date'=>TRUE);
+
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
+			'sort' => $sort,
 			'pagination'=>array('pageSize'=>100),
 		));
 	}

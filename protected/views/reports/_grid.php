@@ -158,6 +158,8 @@
 		),
 		array(
             'header'=>'Выиграно',
+            'sortable' => true,
+            'name' => 'company.c_count',
             'value'=>'$data->company->c_count',
         ),
 		array(
