@@ -137,6 +137,8 @@ class ReportsController extends Controller
 
 		if(isset($_GET['winners']))
 			$model->winners = true;
+		if(isset($_GET['potantials']))
+			$model->potantials = true;
 
 		if(isset($_GET['Reports']['c_name']))
 			$model->c_name = $_GET['Reports']['c_name'];
@@ -200,6 +202,44 @@ class ReportsController extends Controller
 		}elseif($action == 'delete'){
 			if(!empty($exist)){
 				$cdb->delete('user_companies', 'user_id=:u_id AND company_id=:company_id', array(
+					':company_id' => $company_id,
+					':u_id' => $user_id
+				));
+			}
+		}
+
+		Yii::app()->end();
+	}
+
+	/**
+	 * Change potantial clients
+	 */
+
+	public function actionChangePotantials($company_id, $action='add'){
+		$cdb = Yii::app()->db->createCommand();
+
+		$company = Companies::model()->findByPk($company_id);
+
+		if($company === null) Yii::app()->end();
+
+		$user_id = Yii::app()->user->id;
+
+		$exist = $cdb->select('*')
+		    ->from('potantial_clients')
+		    ->where('company_id=:company_id AND user_id=:user_id', 
+		    	array(':company_id'=>$company_id, ':user_id'=>$user_id)
+		    )->queryRow();
+
+		if($action == 'add'){
+			if(empty($exist)){
+				$cdb->insert('potantial_clients', array(
+					'company_id' => $company_id,
+					'user_id' => $user_id
+				));
+			}
+		}elseif($action == 'delete'){
+			if(!empty($exist)){
+				$cdb->delete('potantial_clients', 'user_id=:u_id AND company_id=:company_id', array(
 					':company_id' => $company_id,
 					':u_id' => $user_id
 				));

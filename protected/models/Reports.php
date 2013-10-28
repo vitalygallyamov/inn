@@ -20,6 +20,7 @@ class Reports extends CActiveRecord
 
 	public $hidden = true;
 	public $winners = false;
+	public $potantials = false;
 	public $c_name;
 	/**
 	 * @return string the associated database table name
@@ -144,6 +145,18 @@ class Reports extends CActiveRecord
 			 $criteria->addInCondition('r_inn', $user_ids); 
 		}
 
+		//potantials
+		if($this->potantials){
+			$user_id = Yii::app()->user->id;
+
+			$user_ids = Yii::app()->db->createCommand()
+				->select('company_id')
+				->from('potantial_clients')
+				->where('user_id=:user_id', array(':user_id' => $user_id))
+				->queryColumn();
+			 $criteria->addInCondition('r_inn', $user_ids); 
+		}
+
 		$sort = new CSort;
 		$sort->attributes = array('company.c_count'=>array('asc'=>'company.c_count', 'desc'=>'company.c_count DESC'), '*');
 		$sort->defaultOrder = array('date'=>TRUE);
@@ -205,6 +218,18 @@ class Reports extends CActiveRecord
 		$winners = Yii::app()->db->createCommand()
 			->select('*')
 			->from('user_companies')
+			->where('user_id=:u_id AND company_id=:c_id', array(':u_id' => Yii::app()->user->id, ':c_id' => $company->c_inn))
+			->queryRow();
+
+		return !empty($winners);
+	}
+
+	public function hasPotantial(){
+		$company = Companies::model()->findByPk($this->r_inn);
+		
+		$winners = Yii::app()->db->createCommand()
+			->select('*')
+			->from('potantial_clients')
 			->where('user_id=:u_id AND company_id=:c_id', array(':u_id' => Yii::app()->user->id, ':c_id' => $company->c_inn))
 			->queryRow();
 

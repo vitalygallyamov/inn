@@ -15,7 +15,7 @@
         ),*/
 		array(
 			'class'=>'CButtonColumn',
-			'template' => '{to_hide} {to_show} {winners} {cancel_winners}',
+			'template' => '{to_hide} {to_show} {winners} {cancel_winners} {add_potantials} {remove_potantials}',
 			'header'=>'Действия',
 			'buttons' => array(
 				'to_hide' => array( 
@@ -81,6 +81,42 @@
 							var company_id = $(this).closest("tr").data("company");
 							$.ajax({
 								url: "/reports/changeWinners",
+								data: {company_id: company_id, action: "delete"},
+								type: "GET",
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
+							});
+						}
+					}'
+				),
+				'add_potantials' => array( 
+					'label' => 'Потенциальный клиент',
+					'visible' => '!$data->hasPotantial()',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Добавить в потенциальные клиенты?")){
+							var company_id = $(this).closest("tr").data("company");
+							$.ajax({
+								url: "/reports/changePotantials",
+								data: {company_id: company_id},
+								type: "GET",
+								success: function(){
+									jQuery("#reports-grid").yiiGridView("update");
+								}
+							});
+						}
+					}'
+				),
+				'remove_potantials' => array( 
+					'label' => 'Убрать из потенцальных клиентов',
+					'visible' => '$data->hasPotantial()',
+					'click' => 'js:function(e){
+						e.preventDefault();
+						if(confirm("Удалить из потенциальных клиентов?")){
+							var company_id = $(this).closest("tr").data("company");
+							$.ajax({
+								url: "/reports/changePotantials",
 								data: {company_id: company_id, action: "delete"},
 								type: "GET",
 								success: function(){

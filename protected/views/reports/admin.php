@@ -40,11 +40,17 @@ $('.search-form form').submit(function(){
 	foreach ($u->winners as $value) {
 		$count_winners += count($value->protocols);
 	}
+
+	$count_potantials = 0;
+	foreach ($u->potantials as $value) {
+		$count_potantials += count($value->protocols);
+	}
 ?>
 
 <div class="action_buttons">
 	<?php echo CHtml::link('Показать скрытые', $this->createUrl('admin', array('hidden' => true)));?>
 	<?php echo CHtml::link('Победители'." (".$count_winners.")", $this->createUrl('admin', array('winners' => true)));?>
+	<?php echo CHtml::link('Потенциальные клиенты'." (".$count_potantials.")", $this->createUrl('admin', array('potantials' => true)));?>
 </div>
 
 <div id="comment-form" style="display: none;">
