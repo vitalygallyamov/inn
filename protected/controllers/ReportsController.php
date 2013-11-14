@@ -338,7 +338,16 @@ class ReportsController extends Controller
 			        		//if no in db then add
 			        		$dbCommand2 = Yii::app()->db->createCommand();
 			        		$dbCommand2->insert('companies', $c_columns);
+			        	}else{
+			        		//$c_inn = $c_columns['c_inn'];
+			        		//unset($c_columns['c_inn']);
+			        		$c_tmp = $c_columns;
+			        		$c_inn = $c_columns['c_inn'];
+			        		unset($c_tmp['c_inn']);
+			        		$dbCommand->update('companies', $c_tmp, 'c_inn=:c_inn', array(':c_inn' => $c_inn));
+			        		// unset($c_tmp);
 			        	}
+
 			        	//increment company counter
 			        	$sql="UPDATE companies SET c_count = c_count + 1 WHERE c_inn=:c_inn";
 			        	$up_counter = Yii::app()->db->createCommand($sql);
